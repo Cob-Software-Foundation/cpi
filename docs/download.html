@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cob Package Registry &mdash; Download</title>
+<style>
+  :root {
+    --bg: #0d0f0c;
+    --panel: #15180f;
+    --corn: #f2c14e;
+    --corn-dim: #b8933a;
+    --leaf: #6a9955;
+    --text: #e8e6d9;
+    --text-dim: #9a978a;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+  }
+  header {
+    padding: 4rem 1.5rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid #2a2d20;
+  }
+  header h1 {
+    font-size: 2.75rem;
+    margin: 0 0 0.25rem;
+    color: var(--corn);
+  }
+  header .codename {
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+  }
+  header p.tagline {
+    color: var(--text-dim);
+    max-width: 40rem;
+    margin: 1rem auto 0;
+  }
+  main {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 5rem;
+  }
+  section { margin-bottom: 3rem; }
+  h2 {
+    color: var(--leaf);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid #2a2d20;
+    padding-bottom: 0.5rem;
+  }
+  pre {
+    background: var(--panel);
+    border: 1px solid #2a2d20;
+    border-radius: 6px;
+    padding: 1.1rem 1.3rem;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+  code { font-family: var(--mono); }
+  .kw { color: var(--corn-dim); }
+  a { color: var(--corn); }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid #2a2d20;
+    border-radius: 8px;
+    padding: 1.2rem;
+  }
+  .card h3 {
+    margin: 0 0 0.4rem;
+    color: var(--corn);
+    font-size: 1rem;
+    font-family: var(--mono);
+  }
+  .card .ver {
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    margin: 0 0 0.6rem;
+  }
+  .card p { margin: 0 0 0.8rem; color: var(--text-dim); font-size: 0.9rem; }
+  .card .links { font-family: var(--mono); font-size: 0.82rem; }
+  .card .links a { display: block; margin-bottom: 0.2rem; }
+  .sha { color: var(--text-dim); word-break: break-all; }
+  .note {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    border-left: 2px solid var(--leaf);
+    padding-left: 0.8rem;
+    margin-top: 1rem;
+  }
+  footer {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    padding: 2rem 1.5rem 3rem;
+    border-top: 1px solid #2a2d20;
+  }
+  footer a { color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Download</h1>
+  <div class="codename">Cob Package Registry</div>
+  <p class="tagline">
+    Every package this registry knows about, generated straight from
+    <a href="api/v1/packages/index.json">api/v1/packages/index.json</a>.
+    Nothing here is fetched from a database &mdash; it's the same static
+    JSON <code>farmer</code> reads.
+  </p>
+</header>
+
+<main>
+
+<section>
+  <h2>Use farmer instead</h2>
+  <p>
+    You don't need this page to install a package &mdash; it's here for
+    browsing. From your project directory:
+  </p>
+  <pre>farmer harvest <span class="kw">&lt;package-name&gt;</span></pre>
+  <p>
+    resolves against <code>$COB_FARMER_BASE_URL</code> (defaults to this
+    site), verifies the package's sha256, and unzips it into
+    <code>cob_modules/&lt;package-name&gt;/</code>.
+  </p>
+</section>
+
+<section>
+  <h2>Available packages</h2>
+  <div id="packages" class="grid">
+    <p style="color: var(--text-dim); grid-column: 1 / -1;">Loading package list&hellip;</p>
+  </div>
+  <p id="load-error" class="note" style="display:none;">
+    Couldn't load <a href="api/v1/packages/index.json">api/v1/packages/index.json</a>
+    from here &mdash; you can open that file directly, or browse
+    <a href="https://github.com/Cob-Software-Foundation/cpi/tree/main/docs/api/v1/packages">the raw manifests on GitHub</a>.
+  </p>
+</section>
+
+<section>
+  <h2>Add your own</h2>
+  <p>
+    This registry is just static files in a GitHub repo &mdash; see
+    <a href="https://github.com/Cob-Software-Foundation/cpi">Cob-Software-Foundation/cpi</a>
+    for how <code>math</code> and <code>greeter</code> are laid out, then open a PR
+    with your own <code>docs/api/v1/packages/&lt;name&gt;.json</code> manifest,
+    a <code>docs/packages/&lt;name&gt;-&lt;version&gt;.zip</code>, and an entry added
+    to <code>index.json</code>.
+  </p>
+</section>
+
+</main>
+
+<footer>
+  Cob Language &middot; handcrafted by Pixel-Pulse &middot;
+  <a href="https://github.com/Cob-Software-Foundation/Cob/blob/main/LICENSE.md">PolyForm Noncommercial 1.0.0</a>
+</footer>
+
+<script>
+(function () {
+  var container = document.getElementById('packages');
+  var errBox = document.getElementById('load-error');
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  fetch('api/v1/packages/index.json')
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function (idx) {
+      var packages = (idx && idx.packages) || [];
+      if (!packages.length) {
+        container.innerHTML = '<p style="color: var(--text-dim); grid-column: 1 / -1;">No packages published yet.</p>';
+        return;
+      }
+      var fetches = packages.map(function (p) {
+        return fetch('api/v1/packages/' + encodeURIComponent(p.name) + '.json')
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .catch(function () { return null; });
+      });
+      Promise.all(fetches).then(function (manifests) {
+        container.innerHTML = manifests.map(function (m, i) {
+          var p = packages[i];
+          if (!m) {
+            return '<div class="card"><h3>' + esc(p.name) + '</h3>' +
+              '<p class="ver">v' + esc(p.version) + '</p>' +
+              '<p>' + esc(p.description || '') + '</p>' +
+              '<p class="note" style="margin-top:0;">manifest failed to load</p></div>';
+          }
+          return '<div class="card">' +
+            '<h3>' + esc(m.name) + '</h3>' +
+            '<p class="ver">v' + esc(m.version) + '</p>' +
+            '<p>' + esc(m.description || '') + '</p>' +
+            '<div class="links">' +
+              '<a href="' + esc(m.zip_url) + '">' + esc(m.name) + '-' + esc(m.version) + '.zip</a>' +
+              '<a href="api/v1/packages/' + esc(m.name) + '.json">manifest.json</a>' +
+            '</div>' +
+            '<p class="sha">sha256: ' + esc(m.sha256) + '</p>' +
+          '</div>';
+        }).join('');
+      });
+    })
+    .catch(function () {
+      container.innerHTML = '';
+      errBox.style.display = 'block';
+    });
+})();
+</script>
+
+</body>
+</html>
